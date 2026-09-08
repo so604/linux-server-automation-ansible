@@ -1,0 +1,22 @@
+---
+- name: Check Critical Services
+  hosts: servers
+  become: true
+
+  tasks:
+
+    - name: Check Apache service
+      ansible.builtin.systemd:
+        name: httpd
+      register: apache_service
+
+    - name: Display Apache status
+      ansible.builtin.debug:
+        msg: "Apache on {{ inventory_hostname }} is {{ apache_service.status.ActiveState }}"
+
+    - name: Fail if Apache is not running
+      ansible.builtin.assert:
+        that:
+          - apache_service.status.ActiveState == "active"
+        fail_msg: "CRITICAL: Apache is NOT running on {{ inventory_hostname }}"
+        success_msg: "OK: Apache is running on {{ inventory_hostname }}"

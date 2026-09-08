@@ -1,0 +1,39 @@
+---
+- name: Configure multiple web servers
+  hosts: servers
+  become: true
+
+  tasks:
+
+    - name: Install Apache
+      ansible.builtin.dnf:
+        name: httpd
+        state: present
+
+    - name: Start and enable Apache
+      ansible.builtin.service:
+        name: httpd
+        state: started
+        enabled: true
+
+    - name: Allow HTTP through firewall
+      ansible.posix.firewalld:
+        service: http
+        permanent: true
+        immediate: true
+        state: enabled
+
+    - name: Deploy custom webpage
+      ansible.builtin.copy:
+        dest: /var/www/html/index.html
+        content: |
+          <html>
+          <head>
+            <title>Ansible Web Server</title>
+          </head>
+          <body>
+            <h1>Welcome to Sonam's Ansible Project</h1>
+            <p>This server is configured automatically using Ansible.</p>
+          </body>
+          </html>
+        mode: '0644'

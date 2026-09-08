@@ -1,0 +1,30 @@
+---
+- name: Deploy website using variables
+  hosts: servers
+  become: true
+
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - name: Deploy website
+      ansible.builtin.copy:
+        dest: /var/www/html/index.html
+        content: |
+          <html>
+          <head>
+            <title>{{ website_title }}</title>
+          </head>
+          <body>
+            <h1>{{ website_title }}</h1>
+            <p>{{ server_message }}</p>
+          </body>
+          </html>
+        mode: '0644'
+      notify: Restart Apache
+
+  handlers:
+    - name: Restart Apache
+      ansible.builtin.service:
+        name: httpd
+        state: restarted

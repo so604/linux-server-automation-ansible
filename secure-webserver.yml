@@ -1,0 +1,19 @@
+---
+- name: Secure Apache Web Server
+  hosts: servers
+  become: true
+
+  tasks:
+
+    - name: Allow HTTP through firewall
+      ansible.posix.firewalld:
+        service: http
+        permanent: true
+        immediate: true
+        state: enabled
+
+    - name: Make sure Apache is running
+      ansible.builtin.service:
+        name: httpd
+        state: started
+        enabled: true

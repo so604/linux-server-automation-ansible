@@ -1,0 +1,32 @@
+---
+- name: Monitor Linux Servers
+  hosts: servers
+  become: true
+
+  tasks:
+
+    - name: Check disk usage
+      ansible.builtin.command: df -h /
+      register: disk_usage
+
+    - name: Check memory usage
+      ansible.builtin.command: free -h
+      register: memory_usage
+
+    - name: Check CPU load
+      ansible.builtin.command: uptime
+      register: cpu_load
+
+    - name: Check Apache service
+      ansible.builtin.command: systemctl is-active httpd
+      register: apache_status
+      changed_when: false
+
+    - name: Display server monitoring report
+      ansible.builtin.debug:
+        msg:
+          - "===== SERVER MONITORING REPORT ====="
+          - "Disk Usage: {{ disk_usage.stdout }}"
+          - "Memory Usage: {{ memory_usage.stdout }}"
+          - "CPU Load: {{ cpu_load.stdout }}"
+          - "Apache Status: {{ apache_status.stdout }}"

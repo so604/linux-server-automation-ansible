@@ -1,0 +1,31 @@
+---
+- name: Install Apache
+  ansible.builtin.dnf:
+    name: httpd
+    state: present
+
+- name: Create web page
+  ansible.builtin.copy:
+    dest: /var/www/html/index.html
+    content: |
+      <html>
+      <body>
+        <h1>Sonam Linux Server</h1>
+        <p>Deployed using Ansible Role</p>
+      </body>
+      </html>
+    mode: '0644'
+  notify: Restart Apache
+
+- name: Enable and start Apache
+  ansible.builtin.service:
+    name: httpd
+    state: started
+    enabled: true
+
+- name: Allow HTTP in firewall
+  ansible.posix.firewalld:
+    service: http
+    permanent: true
+    immediate: true
+    state: enabled

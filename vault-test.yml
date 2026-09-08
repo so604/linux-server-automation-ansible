@@ -1,0 +1,16 @@
+---
+- name: Test Ansible Vault
+  hosts: servers
+  become: true
+
+  vars_files:
+    - secrets.yml
+
+  tasks:
+    - name: Create secret information file
+      ansible.builtin.copy:
+        dest: /root/secret-info.txt
+        content: |
+          Database Password: {{ db_password }}
+          Admin Password: {{ admin_password }}
+        mode: '0600'

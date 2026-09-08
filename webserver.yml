@@ -1,0 +1,24 @@
+---
+- name: Configure Web Server
+  hosts: servers
+  become: true
+
+  tasks:
+
+    - name: Create admin user
+      ansible.builtin.user:
+        name: webadmin
+        state: present
+
+    - name: Install Apache
+      ansible.builtin.dnf:
+        name: httpd
+        state: present
+
+    - name: Start and enable Apache
+      ansible.builtin.service:
+        name: httpd
+        state: started
+        enabled: true
+        
+

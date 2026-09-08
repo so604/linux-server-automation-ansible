@@ -1,0 +1,17 @@
+---
+- name: Configure Automated Backup
+  hosts: servers
+  become: true
+
+  tasks:
+    - name: Create backup directory
+      ansible.builtin.file:
+        path: /backup
+        state: directory
+        mode: '0755'
+
+    - name: Backup /etc directory
+      ansible.builtin.archive:
+        path: /etc
+        dest: "/backup/etc-backup.tar.gz"
+        format: gz

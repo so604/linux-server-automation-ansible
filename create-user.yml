@@ -1,0 +1,10 @@
+---
+- name: create user on managed server
+  hosts: servers
+  become: true 
+    
+  tasks:
+    - name: create sonamadmin user
+      user:
+        name: sonamadmin 
+        state: present 

@@ -1,0 +1,26 @@
+---
+- name: Deploy custom website
+  hosts: servers
+  become: true
+
+  tasks:
+    - name: Create website page
+      ansible.builtin.copy:
+        dest: /var/www/html/index.html
+        content: |
+          <html>
+          <head>
+            <title>Sonam Linux Server</title>
+          </head>
+          <body>
+            <h1>Welcome to Sonam's Linux Server</h1>
+            <p>This website was deployed using Ansible.</p>
+            <p>Server: server.sonam.local</p>
+          </body>
+          </html>
+        mode: '0644'
+
+    - name: Restart Apache
+      ansible.builtin.service:
+        name: httpd
+        state: restarted

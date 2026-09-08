@@ -1,0 +1,27 @@
+---
+- name: Configure Daily Backup Schedule
+  hosts: servers
+  become: true
+
+  tasks:
+
+    - name: Create backup directory
+      ansible.builtin.file:
+        path: /backup
+        state: directory
+        mode: '0755'
+
+    - name: Create backup script
+      ansible.builtin.copy:
+        dest: /usr/local/bin/etc-backup.sh
+        mode: '0755'
+        content: |
+          #!/bin/bash
+          tar -czf /backup/etc-backup-$(date +\%F).tar.gz /etc
+
+    - name: Schedule daily backup
+      ansible.builtin.cron:
+        name: "Daily /etc backup"
+        minute: "0"
+        hour: "2"
+        job: "/usr/local/bin/etc-backup.sh"
