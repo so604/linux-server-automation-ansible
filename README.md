@@ -8,14 +8,10 @@ The project uses one Ansible Control Node to manage multiple RHEL servers and au
 
 ##  Architecture
 
-Ansible Control Node
-        |
-        | SSH
-        |
-   ┌────┴────┐
-   ↓         ↓
-Server 2   Server 3
-RHEL 10    RHEL 9
+Ansible Control Node -->SSH->-server2 RHEL10-->SSH--->server3 RHEL9
+                          
+			  `
+
 
 ## Technologies Used
 
@@ -30,7 +26,7 @@ RHEL 10    RHEL 9
 - Git & GitHub
 - Linux Shell
 
-## ⚙️ Automation Features
+## Automation Features
 
 ### 1. User Management
 - Automated Linux user creation using Ansible.
